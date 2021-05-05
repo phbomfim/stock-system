@@ -4,7 +4,7 @@ class CreateMovimentacaos < ActiveRecord::Migration[6.1]
       t.references :produto, null: false, foreign_key: true
       t.references :localarmazenamento, null: false, foreign_key: true
       t.string :tipo
-      t.int :quantidade
+      t.integer :quantidade
 
       t.timestamps
     end
