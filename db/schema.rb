@@ -13,7 +13,7 @@
 ActiveRecord::Schema.define(version: 2021_05_05_215530) do
 
   create_table "local_armazenamentos", force: :cascade do |t|
-    t.string "nome"
+    t.string "nome", :length => 20
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 2021_05_05_215530) do
   create_table "movimentacaos", force: :cascade do |t|
     t.integer "produto_id", null: false
     t.integer "localarmazenamento_id", null: false
-    t.string "tipo"
+    t.string "tipo", :length => 1
     t.integer "quantidade"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 2021_05_05_215530) do
   end
 
   create_table "produtos", force: :cascade do |t|
-    t.string "nome"
+    t.string "nome", :length => 20
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
