@@ -1,4 +1,8 @@
 class HomeController < ApplicationController
+    ## Produto.find(ID) - Encontrar pela ID 
+    ## @produto = Produto.find_or_create_by(nome: nome_produto) - Encontrar por termo
+    ## Atualizar por termo se o produto existir
+    ## @produto.update_attribute(:quantidade, @produto.quantidade +=1 ) if @produto.exist?
 
     def index
         @produtos = Produto.all
@@ -7,33 +11,6 @@ class HomeController < ApplicationController
     end
 
     def create
-        CSV.foreach("movimentacao_de_estoque.csv", headers: true , header_converters: :symbol) do |row| 
-            nome_deposito, data, tipo_de_movimentacao, nome_produto, quantidade = row
-            if (tipo_de_movimentacao == [tipo_de_movimentacao, "E"])
-                @produto = Produto.new(nome: nome_produto[1])
-                @local = LocalArmazenamento.new(nome: nome_deposito[1])
-
-                if @produto.save
-                    if @local.save
-                        redirect_to home_path
-                    else 
-                        redirect_to armazenamento_locals_path
-                    end
-                else  
-                    redirect_to produtos_path
-                end
-
-                #@movimento = Movimentacao.new(
-                #    data: data[1], 
-                #    tipo: tipo_de_movimentacao[1], 
-                #    quantidade: quantidade[1],
-                #    produto_id: Produto.last.id,
-                #    localarmazenamento_id: LocalArmazenamento.last.id)
-                puts "Importou #{contador} registros"
-            else  
-                puts "Nao tinha nada"
-            end
-        end
     end
 
     def import
@@ -44,4 +21,8 @@ class HomeController < ApplicationController
             end
         end
     end
+
+    private
+
+
 end
