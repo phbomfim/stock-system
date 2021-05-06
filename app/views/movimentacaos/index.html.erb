@@ -1,13 +1,7 @@
 <div>
     <h1 class="mt-3 mb-3">Movimentações:</h1>
     <% @movimentacaos.each do |m| %>
-        <h6><%= m.produto_id%></h6>
-        <h6><%= m.localarmazenamento_id%></h6>
-        <h6><%= m.tipo%></h6>
-        <h6><%= m.quantidade%></h6>
-        <h6><%= m.created_at%></h6>
-        <h6><%= m.updated_at%></h6>
-        <h6><%= m.data%></h6>
+        <h6><%= m.produto_id%> - <%= m.local_armazenamento_id%> - <%= m.tipo%> - <%= m.quantidade%> - <%= m.data%></h6>
     <% end %>
 </div>
 
