@@ -1,3 +1,3 @@
 class LocalArmazenamento < ApplicationRecord
-    validates :nome, uniqueness: true
+    validates :nome, length: {maximum: 20}, presence: true, uniqueness: true
 end
