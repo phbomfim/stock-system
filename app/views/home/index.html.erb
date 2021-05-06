@@ -1,3 +1,8 @@
+<% CSV.foreach("movimentacao_de_estoque.csv", headers: true , header_converters: :symbol) do |row| %>
+    <% nome_depsito, data, tipo_de_movimentacao, nome_produto, quantidade = row %>
+    <p><%= nome_depsito %> - <%= data %> - <%= tipo_de_movimentacao %> - <%= nome_produto %> - <%= quantidade %></p>
+<% end %>
+
 <div>
     <h3 class="mt-3 mb-3">Movimentações:</h3>
     <% @movimentacoes.each do |m| %>

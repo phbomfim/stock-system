@@ -7,7 +7,10 @@ Rails.application.routes.draw do
 
   post "import", to: "home#import"
 
-  post "upload", to: "home#create"
+  post "up", to: "produtos#create"
+  post "up2", to: "local_armazenamentos#create"
+
+  post "upload", to: "movimentacaos#create"
 
   root "home#index"
 end
