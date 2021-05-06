@@ -1,1 +1,41 @@
-<h1 class="mt-3">Movimentações</h1>
+<div>
+    <h3 class="mt-3 mb-3">Movimentações:</h3>
+    <% @movimentacoes.each do |m| %>
+        <h6><%= m.produto_id%></h6>
+        <h6><%= m.localarmazenamento_id%></h6>
+        <h6><%= m.tipo%></h6>
+        <h6><%= m.quantidade%></h6>
+        <h6><%= m.created_at%></h6>
+        <h6><%= m.updated_at%></h6>
+        <h6><%= m.data%></h6>
+    <% end %>
+</div>
+
+<div>
+    <h3 class="mt-3 mb-3">Locais de Armazenamento:</h3>
+    <% @locais.each do |l| %>
+        <h6><%= l.id %> - <%= l.nome %> </h6>
+    <% end %>
+</div>
+
+<div>
+    <h3 class="mt-3 mb-3"> Produtos: </h3>
+    <% @produtos.each do |p| %>
+        <h6><%= p.id %> - <%= p.nome %> </h6>
+    <% end %>
+</div>
+
+<div>
+    <h3 class="mt-3 mb-3"> Importar CSV </h3>
+    <%= form_with url: import_path, multipart: true do |form| %>
+        <%= form.file_field :file %>
+        <%= form.submit %>
+    <% end %>
+</div>
+
+<div>
+    <h3 class="mt-3 mb-3"> Upload to database </h3>
+    <%= form_with url: upload_path do |form| %>
+        <%= form.submit %>
+    <% end %>
+</div>
