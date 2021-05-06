@@ -12,14 +12,13 @@ class MovimentacaosController < ApplicationController
         contador = 0
         CSV.foreach("movimentacao_de_estoque.csv", headers: true , header_converters: :symbol) do |row| 
             nome_deposito, data, tipo_de_movimentacao, nome_produto, quantidade = row
+            
+            ## Verifica se o produto/local existe, caso não, cria
+            @produto = Produto.find_or_create_by(nome: nome_produto[1])
+            @local = LocalArmazenamento.find_or_create_by(nome: nome_deposito[1])
+            
+            ## Primeiro caso = ENTRADA
             if tipo_de_movimentacao[1] == " E"
-        
-                ## Verifica se o produto/local existe, caso não, cria
-
-                @produto = Produto.find_or_create_by(nome: nome_produto[1])
-                @local = LocalArmazenamento.find_or_create_by(nome: nome_deposito[1])
-
-                ## Verifica se ambas criações/verificações estão presentes
 
                 if @produto.present? && @local.present?
                     @estoque = Estoque.find_by(produto_id: @produto.id, local_armazenamento_id: @local.id)
@@ -36,8 +35,28 @@ class MovimentacaosController < ApplicationController
                     end
                 end
 
-                ## Registra a movimentação
+                ## Registra a movimentação de ENTRADA
+                @movimentacao = Movimentacao.new(data: data[1].to_date,tipo: tipo_de_movimentacao[1], quantidade: quantidade[1].to_f,produto_id: Produto.find(@produto.id).id,local_armazenamento_id: LocalArmazenamento.find(@local.id).id)
 
+                if @movimentacao.save
+                    contador += 1
+                end
+
+            ## Segundo caso = SAIDA
+            elsif tipo_de_movimentacao[1] == " S"
+
+                if @produto.present? && @local.present?
+                    @estoque = Estoque.find_by(produto_id: @produto.id, local_armazenamento_id: @local.id)
+                    # Se o registro desse deposito/produto já existir
+                    if @estoque.present?
+                        if @estoque.quantidade >= quantidade[1].to_f    #Verifica quantidade disponivel
+                            @estoque.update_attribute(:quantidade, @estoque.quantidade -= quantidade[1].to_f)
+                            contador += 1
+                        end
+                    end
+                end
+
+                ## Registra a movimentação de SAIDA
                 @movimentacao = Movimentacao.new(data: data[1].to_date,tipo: tipo_de_movimentacao[1], quantidade: quantidade[1].to_f,produto_id: Produto.find(@produto.id).id,local_armazenamento_id: LocalArmazenamento.find(@local.id).id)
 
                 if @movimentacao.save
