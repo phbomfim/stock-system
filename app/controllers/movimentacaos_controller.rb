@@ -10,26 +10,34 @@ class MovimentacaosController < ApplicationController
 
     def create
         contador = 0
-        CSV.foreach("movimentacao_de_estoque.csv", headers: true , header_converters: :symbol) do |row| 
+        rows = []
+
+        CSV.foreach("movimentacao_de_estoque.csv", headers: true , header_converters: :symbol) do |row|
             nome_deposito, data, tipo_de_movimentacao, nome_produto, quantidade = row
+            rows << row.to_h.values
+        end
+
+        rows.sort_by! { |row| row[2]}
             
+        rows.each do |row|
+            nome_deposito, data, tipo_de_movimentacao, nome_produto, quantidade = row
             ## Verifica se o produto/local existe, caso não, cria
-            @produto = Produto.find_or_create_by(nome: nome_produto[1])
-            @local = LocalArmazenamento.find_or_create_by(nome: nome_deposito[1])
+            @produto = Produto.find_or_create_by(nome: nome_produto)
+            @local = LocalArmazenamento.find_or_create_by(nome: nome_deposito)
             
             if @produto.valid? && @local.valid?
 
                 ## Primeiro caso = ENTRADA
-                if tipo_de_movimentacao[1] == " E"
+                if tipo_de_movimentacao == " E"
 
                     @estoque = Estoque.find_by(produto_id: @produto.id, local_armazenamento_id: @local.id)
                     # Se o registro desse deposito/produto já existir, incrementa quantidade
                     if @estoque.present?
-                        @estoque.update_attribute(:quantidade, @estoque.quantidade += quantidade[1].to_f)
+                        @estoque.update_attribute(:quantidade, @estoque.quantidade += quantidade.to_f)
                         contador += 1
                     # Se não realiza um novo registro no estoque
                     else  
-                        @estoque = Estoque.new(produto_id: @produto.id, local_armazenamento_id: @local.id, quantidade: quantidade[1].to_f)
+                        @estoque = Estoque.new(produto_id: @produto.id, local_armazenamento_id: @local.id, quantidade: quantidade.to_f)
                         if @estoque.save
                             contador += 1
                         else
@@ -42,7 +50,7 @@ class MovimentacaosController < ApplicationController
                 
 
                     ## Registra a movimentação de ENTRADA
-                    @movimentacao = Movimentacao.new(data: data[1].to_date,tipo: tipo_de_movimentacao[1], quantidade: quantidade[1].to_f,produto_id: Produto.find(@produto.id).id,local_armazenamento_id: LocalArmazenamento.find(@local.id).id)
+                    @movimentacao = Movimentacao.new(data: data.to_date,tipo: tipo_de_movimentacao, quantidade: quantidade.to_f,produto_id: Produto.find(@produto.id).id,local_armazenamento_id: LocalArmazenamento.find(@local.id).id)
 
                     if @movimentacao.save
                         contador += 1
@@ -55,16 +63,16 @@ class MovimentacaosController < ApplicationController
                     end
 
                 ## Segundo caso = SAIDA
-                elsif tipo_de_movimentacao[1] == " S"
+                elsif tipo_de_movimentacao == " S"
 
                     @estoque = Estoque.find_by(produto_id: @produto.id, local_armazenamento_id: @local.id)
                     # Se o registro desse deposito/produto já existir
                     if @estoque.present?
-                        if @estoque.quantidade >= quantidade[1].to_f    #Verifica quantidade disponivel
-                            @estoque.update_attribute(:quantidade, @estoque.quantidade -= quantidade[1].to_f)
+                        if @estoque.quantidade >= quantidade.to_f    #Verifica quantidade disponivel
+                            @estoque.update_attribute(:quantidade, @estoque.quantidade -= quantidade.to_f)
                             contador += 1
                         else
-                            File.write("log.txt", "Quantidade não suficiente - possui #{@estoque.quantidade} - precisa #{quantidade[1].to_f} \n", mode: "a")
+                            File.write("log.txt", "Quantidade não suficiente - possui #{@estoque.quantidade} - precisa #{quantidade.to_f} \n", mode: "a")
                             File.write("log.txt", "\n", mode: "a")
                         end
                     else
@@ -73,7 +81,7 @@ class MovimentacaosController < ApplicationController
                     end
 
                     ## Registra a movimentação de SAIDA
-                    @movimentacao = Movimentacao.new(data: data[1].to_date,tipo: tipo_de_movimentacao[1], quantidade: quantidade[1].to_f,produto_id: Produto.find(@produto.id).id,local_armazenamento_id: LocalArmazenamento.find(@local.id).id)
+                    @movimentacao = Movimentacao.new(data: data.to_date,tipo: tipo_de_movimentacao, quantidade: quantidade.to_f,produto_id: Produto.find(@produto.id).id,local_armazenamento_id: LocalArmazenamento.find(@local.id).id)
 
                     if @movimentacao.save
                         contador += 1
