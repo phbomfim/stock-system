@@ -8,6 +8,7 @@ class HomeController < ApplicationController
         @produtos = Produto.all
         @movimentacoes = Movimentacao.all
         @locais = LocalArmazenamento.all
+        @estoques = Estoque.all
     end
 
     def create

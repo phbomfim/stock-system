@@ -1,18 +1,18 @@
 class MovimentacaosController < ApplicationController
 
     def index
+        @movimentacaos = Movimentacao.all
     end
 
     def new
-        @movimento = Movimentacao.new
+        @movimentacao = Movimentacao.new
     end
 
     def create
         contador = 0
         CSV.foreach("movimentacao_de_estoque.csv", headers: true , header_converters: :symbol) do |row| 
             nome_deposito, data, tipo_de_movimentacao, nome_produto, quantidade = row
-            ## Verifica se é uma movimentação de entrada
-            if tipo_de_movimentacao == [tipo_de_movimentacao, " E"]
+            if tipo_de_movimentacao[1] == " E"
         
                 ## Verifica se o produto/local existe, caso não, cria
 
@@ -25,11 +25,11 @@ class MovimentacaosController < ApplicationController
                     @estoque = Estoque.find_by(produto_id: @produto.id, local_armazenamento_id: @local.id)
                     # Se o registro desse deposito/produto já existir, incrementa quantidade
                     if @estoque.present?
-                        @estoque.update_attribute(:quantidade, @estoque.quantidade += quantidade[1])
+                        @estoque.update_attribute(:quantidade, @estoque.quantidade += quantidade[1].to_f)
                         contador += 1
                     # Se não realiza um novo registro no estoque
                     else  
-                        @estoque = Estoque.new(produto_id: @produto.id, local_armazenamento_id: @local.id, quantidade: quantidade[1])
+                        @estoque = Estoque.new(produto_id: @produto.id, local_armazenamento_id: @local.id, quantidade: quantidade[1].to_f)
                         if @estoque.save
                             contador += 1
                         end
@@ -38,17 +38,13 @@ class MovimentacaosController < ApplicationController
 
                 ## Registra a movimentação
 
-                @movimento = Movimentacao.new(
-                    data: data[1],
-                    tipo: tipo_de_movimentacao[1], 
-                    quantidade: quantidade[1],
-                    produto_id: Produto.find(@prodto.id),
-                    localarmazenamento_id: LocalArmazenamento.find(@local.id))
+                @movimentacao = Movimentacao.new(data: data[1].to_date,tipo: tipo_de_movimentacao[1], quantidade: quantidade[1].to_f,produto_id: Produto.find(@produto.id).id,local_armazenamento_id: LocalArmazenamento.find(@local.id).id)
 
-                if @movimento.save
+                if @movimentacao.save
                     contador += 1
-                    redirect_to home_index_path
                 end
+            else
+                redirect_to home_index_path  and return
             end
         end
     end
