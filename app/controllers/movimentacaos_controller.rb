@@ -9,6 +9,7 @@ class MovimentacaosController < ApplicationController
     end
 
     def delete
+        #Limpar tabelas de movimentacao e estoque, além de limpar arquivo do log
         @movimentacao = Movimentacao.destroy_all
         @estoque = Estoque.destroy_all
         File.truncate('log.txt', 0)
