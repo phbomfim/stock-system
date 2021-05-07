@@ -15,42 +15,54 @@
 </div>-->
 
 <div>
-    <h3 class="mt-3 mb-3">Logs do Sistema:</h3>
-    <% File.foreach("log.txt") do |row| %>
-        <p><%= row %></p>
-    <% end %>
+    <h3 class="mt-3 mb-3">Inconsistências:</h3>
+    <table class="table table-striped">
+    <thead>
+        <tr>
+        <th scope="col">Descrição</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% File.foreach("log.txt") do |row| %>
+            <tr>
+                <td><%= row %></td>
+            </tr>
+        <% end %>
+    </tbody>
+    </table>
 </div>
 
-<div>
+<!--<div>
     <h3 class="mt-3 mb-3">Movimentações:</h3>
     <% @movimentacoes.each do |m| %>
-        <h6><%= m.produto_id%> - <%= m.local_armazenamento_id%> - <%= m.tipo%> - <%= m.quantidade%> - <%= m.data%></h6>
+        <h6>(<%= m.id %>) <%= LocalArmazenamento.find(m.local_armazenamento_id).nome %> - <%= Produto.find(m.produto_id).nome %> - <%= m.tipo%> - <%= m.quantidade%> - <%= m.data%></h6>
     <% end %>
+</div>-->
+
+<div>
+    <h3 class="mt-5 mb-3">Estoque:</h3>
+    <table class="table table-striped">
+    <thead>
+        <tr>
+        <th scope="col">Local</th>
+        <th scope="col">Produto</th>
+        <th scope="col">Quantidade</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @estoques.each do |e| %>
+            <tr>
+                <td><%= LocalArmazenamento.find(e.local_armazenamento_id).nome %></td>
+                <td><%= Produto.find(e.produto_id).nome %></td>
+                <td><%= e.quantidade %></td>
+            </tr>
+        <% end %>
+    </tbody>
+    </table>
 </div>
 
 <div>
-    <h3 class="mt-3 mb-3">Estoque:</h3>
-    <% @estoques.each do |e| %>
-        <h6><%= e.id %> - <%= e.produto_id %> - <%= e.local_armazenamento_id %> - <%= e.quantidade %> </h6>
-    <% end %>
-</div>
-
-<div>
-    <h3 class="mt-3 mb-3">Locais de Armazenamento:</h3>
-    <% @locais.each do |l| %>
-        <h6><%= l.id %> - <%= l.nome %> </h6>
-    <% end %>
-</div>
-
-<div>
-    <h3 class="mt-3 mb-3"> Produtos: </h3>
-    <% @produtos.each do |p| %>
-        <h6><%= p.id %> - <%= p.nome %> </h6>
-    <% end %>
-</div>
-
-<div>
-    <h3 class="mt-3 mb-3"> Importar CSV </h3>
+    <h3 class="mt-5 mb-3"> Importar CSV </h3>
     <%= form_with url: import_path, multipart: true do |form| %>
         <%= form.file_field :file, accept: ".csv" %>
         <%= form.submit %>
