@@ -15,7 +15,7 @@ class HomeController < ApplicationController
         uploaded_io = params[:file]
         File.open(Rails.root.join(uploaded_io.original_filename), 'wb') do |file|
             if file.write(uploaded_io.read)
-                redirect_to home_index_path
+                redirect_to movimentacaos_path
             end
         end
     end
