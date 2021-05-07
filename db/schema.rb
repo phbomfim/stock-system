@@ -12,9 +12,12 @@
 
 ActiveRecord::Schema.define(version: 2021_05_06_130332) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "estoques", force: :cascade do |t|
-    t.integer "produto_id", null: false
-    t.integer "local_armazenamento_id", null: false
+    t.bigint "produto_id", null: false
+    t.bigint "local_armazenamento_id", null: false
     t.integer "quantidade"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -29,8 +32,8 @@ ActiveRecord::Schema.define(version: 2021_05_06_130332) do
   end
 
   create_table "movimentacaos", force: :cascade do |t|
-    t.integer "produto_id", null: false
-    t.integer "local_armazenamento_id", null: false
+    t.bigint "produto_id", null: false
+    t.bigint "local_armazenamento_id", null: false
     t.string "tipo"
     t.integer "quantidade"
     t.datetime "created_at", precision: 6, null: false
@@ -48,4 +51,6 @@ ActiveRecord::Schema.define(version: 2021_05_06_130332) do
 
   add_foreign_key "estoques", "local_armazenamentos"
   add_foreign_key "estoques", "produtos"
+  add_foreign_key "movimentacaos", "local_armazenamentos"
+  add_foreign_key "movimentacaos", "produtos"
 end
