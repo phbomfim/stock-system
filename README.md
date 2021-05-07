@@ -8,6 +8,7 @@
 
 1. Read a .CSV file with migrations and run to store in system
 2. "movimentacao_de_estoque.csv" is a template file
+3. This system show all errors ocurred in migrations
 
 ## Prerequisites ⚙️
 
