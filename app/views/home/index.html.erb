@@ -1,0 +1,70 @@
+<!--<div>
+    <h3 class="mt-3 mb-3">Dados do CSV:</h3>
+    <% rows = [] %>
+    <% CSV.foreach("movimentacao_de_estoque.csv", headers: true , header_converters: :symbol) do |row| %>
+        <% nome_deposito, data, tipo_de_movimentacao, nome_produto, quantidade = row %>
+            <% rows << row.to_h.values %>
+        <% end %>
+
+        <% rows.sort_by! { |row| row[2]} %>
+            
+        <% rows.each do |row| %>
+            <% nome_deposito, data, tipo_de_movimentacao, nome_produto, quantidade = row %>
+        <p><%= nome_deposito %> - <%= data %> - <%= tipo_de_movimentacao %> - <%= nome_produto %> - <%= quantidade %></p>
+    <% end %>
+</div>-->
+
+<div>
+    <h3 class="mt-3 mb-4">Inconsistências:</h3>
+    <table class="table table-striped">
+    <thead>
+        <tr>
+        <th scope="col">Descrição</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% File.foreach("log.txt") do |row| %>
+            <tr>
+                <td><%= row %></td>
+            </tr>
+        <% end %>
+    </tbody>
+    </table>
+</div>
+
+<!--<div>
+    <h3 class="mt-3 mb-3">Movimentações:</h3>
+    <% @movimentacoes.each do |m| %>
+        <h6>(<%= m.id %>) <%= LocalArmazenamento.find(m.local_armazenamento_id).nome %> - <%= Produto.find(m.produto_id).nome %> - <%= m.tipo%> - <%= m.quantidade%> - <%= m.data%></h6>
+    <% end %>
+</div>-->
+
+<div>
+    <h3 class="mt-5 mb-4">Estoque:</h3>
+    <table class="table table-striped">
+    <thead>
+        <tr>
+        <th scope="col">Local</th>
+        <th scope="col">Produto</th>
+        <th scope="col">Quantidade</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @estoques.each do |e| %>
+            <tr>
+                <td><%= LocalArmazenamento.find(e.local_armazenamento_id).nome %></td>
+                <td><%= Produto.find(e.produto_id).nome %></td>
+                <td><%= e.quantidade %></td>
+            </tr>
+        <% end %>
+    </tbody>
+    </table>
+</div>
+
+<div>
+    <h3 class="mt-5 mb-4"> Importar CSV </h3>
+    <%= form_with url: import_path, multipart: true do |form| %>
+        <%= form.file_field :file, accept: ".csv" %>
+        <%= form.submit %>
+    <% end %>
+</div>

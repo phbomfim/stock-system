@@ -1,0 +1,20 @@
+<div>
+    <h2 class="mt-3 mb-4">Locais de Armazenamento:</h2>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Local</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @locais.each do |l| %>
+        <tr>
+            <th scope="row"><%= l.id %></th>
+            <td><%= l.nome %></td>
+        </tr>
+    <% end %>
+  </tbody>
+</table>
