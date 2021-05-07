@@ -8,6 +8,14 @@ class MovimentacaosController < ApplicationController
         @movimentacao = Movimentacao.new
     end
 
+    def delete
+        @movimentacao = Movimentacao.destroy_all
+        @estoque = Estoque.destroy_all
+        File.truncate('log.txt', 0)
+
+        redirect_to home_index_path 
+    end
+
     def create
         contador = 0
         rows = []
