@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   post "up2", to: "local_armazenamentos#create"
 
   post "upload", to: "movimentacaos#create"
+  post "restore", to: "movimentacaos#delete"
 
   root "home#index"
 end

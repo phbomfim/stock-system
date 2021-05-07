@@ -28,12 +28,13 @@
 </table>
 
 <div class="">
-    <% if @movimentacaos.count == 0 %>
-      <h3 class="mt-5 mb-3">Gerar novas movimentações </h3>
-      <%= form_with model: @movimentacao, url: upload_path do |form| %>
-        <%= form.submit "Registrar a partir do anexo" %>
+    <h3 class="mt-5 mb-3">Gerar novas movimentações </h3>
+    <%= form_with model: @movimentacao, url: upload_path do |form| %>
+      <%= form.submit "Registrar a partir do anexo" %>
+    <% end %>
+    <% if @movimentacaos.count != 0 %>
+      <%= form_with model: @movimentacao, url: restore_path do |form| %>
+        <%= form.submit "Limpar registros", class: "mt-2 btn text-danger"%>
       <% end %>
-    <% else %>
-      <h3 class="mt-5 mb-3 text-muted"> As movimentações já foram geradas </h3>
     <% end %>
 </div>
