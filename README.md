@@ -1,6 +1,6 @@
 # <div align="center">Stock System 📦</div>
 
-##### <div align="center">A stock system reading .CSV files</div>
+##### <div align="center">An inventory system generated from CSV files.</div>
 
 ![img](https://i.imgur.com/JrUiCwB.png)
 
