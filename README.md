@@ -2,12 +2,12 @@
 
 ##### <div align="center">A stock system reading .CSV files</div>
 
-![img](https://i.imgur.com/mGmEGf0.png)
+![img](https://i.imgur.com/JrUiCwB.png)
 
 ## Project notes 📋
 
-1. Read a .CSV file with migrations and run to store in system
-2. "movimentacao_de_estoque.csv" is a template file
+1. Read a .CSV file with migrations and values, and generate a data in system
+2. "movimentacao_de_estoque.csv" is a template file and you can rely on it.
 3. This system show all errors ocurred in migrations
 
 ## Prerequisites ⚙️
@@ -43,6 +43,11 @@
 
 ```$ rails s ```
 
+## Instructions
+
+1. In the homepage click on "Importar CSV" button. ***Selecet a .csv file named movimentacao_de_estoque.csv !***
+2. Next, go to "Movimentações" link and run "Gerar novas movimentações"
+3. Now, you have a stock logs and values in your view and database!
 
 ## Contribuition 📈
 
